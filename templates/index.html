@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo da Forca</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Jogo da Forca</h1>
+        <p>Palavra: {{palavra_display}}</p>
+        <p>Tentativas: {{tentativas}}</p>
+        <p>Letras erradas: {{erros}}</p>
+        <p>{{mensagem}}</p>
+
+        {% if '_' not in palavra_display %}
+            <p>Parabéns! Você venceu!</p>
+            <a href= "{{ url_for('reiniciar') }}">Jogar novamente</a>
+        {% elif erros >= 6 %}
+            <p>Que pena! Você perdeu!</p>
+            <p>A palavra era: {{ session.palavra }}</p>
+            <a href="{{ url_for('reiniciar') }}">Jogar novamente</a>
+        {% else %}
+            <form action="{{ url_for('tentativa') }}" method="POST">
+                <label for="tentativa">Digite uma letra:</label>
+                <input type="text" name="tentativa" maxlength="1" required>
+                <button type="submit">Tentar</button>
+            </form>
+            <form action="{{ url_for('dica') }}" method="GET">
+                <button type="submit" {% if session.get('dica_usada') %}disabled{% endif %}>Obtenha uma dica</button>
+            </form>
+        {% endif %}
+
+    </div>
+
+</body>
+</html>
